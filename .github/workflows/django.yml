@@ -31,7 +31,5 @@ jobs:
         pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt        
     - name: Run Tests
       run: |
-        ls -a
-        cd src
-        cp app/.env.ci app/.env
+        cd src && cp app/.env.ci app/.env
         python manage.py test
