@@ -32,5 +32,6 @@ jobs:
     - name: Run Tests
       run: |
         ls -a
+        cd src
         cp app/.env.ci app/.env
         python manage.py test
