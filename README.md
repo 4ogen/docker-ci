@@ -1,5 +1,7 @@
 # Django project
 
+[![NoHopeAhead](https://github.com/4ogen/docker-ci/actions/workflows/prob1.yml/badge.svg?branch=master)](https://github.com/4ogen/docker-ci/actions/workflows/prob1.yml)
+
 ## Project structure
 
 The main django app is called `app`. It contains `.env` file for django-environ. For examples see `src/app/.env.ci`. Here are some usefull app-wide tools:
