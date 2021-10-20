@@ -1,8 +1,7 @@
 # Django project
 
 
-[![NoHopeAhead](https://github.com/4ogen/docker-ci/actions/workflows/prob1.yml/badge.svg?branch=master)](https://github.com/4ogen/docker-ci/actions/workflows/prob1.yml)
-
+[![Docker Image CI](https://github.com/4ogen/docker-ci/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/4ogen/docker-ci/actions/workflows/docker-image.yml)
 
 ## Project structure
 
