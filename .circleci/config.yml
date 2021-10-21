@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Install cookiecutter
-          command: pip install --upgrade pip pip-tools cookiecutter
+          command: pip install --upgrade pip pip-tools cookiecutter pytest
 
       - run:
           name: Bootstrap the project
