@@ -9,7 +9,9 @@ jobs:
       - checkout
       - run:
           name: Install cookiecutter
-          command: pip install --upgrade pip pip-tools cookiecutter pytest
+          command: | 
+                   pip install --upgrade pip pip-tools cookiecutter pytest
+                   pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
 
       - run:
           name: Bootstrap the project
