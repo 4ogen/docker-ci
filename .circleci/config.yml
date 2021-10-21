@@ -10,8 +10,7 @@ jobs:
       - run:
           name: Install cookiecutter
           command: | 
-                   apt-get update
-                   apt-get --no-install-recommends install -y build-essential python-dev
+                   apt-get install -y build-essential python-dev
                    pip install --upgrade pip pip-tools cookiecutter pytest
                    pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
 
