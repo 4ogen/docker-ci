@@ -1,25 +1,105 @@
 version: 2.1
 
+orbs:
+  docker: circleci/docker@1.7.0
+
+defaults: &defaults
+  docker:
+    - image: cimg/python:3.8
+      environment:
+        - DATABASE_URL=postgres://postgres:password@postgres:5432/circle_test
+        - REDISCLOUD_URL=redis://redis:6379
+
+    - image: circleci/redis:6.2-alpine
+      name: redis
+
+    - image: circleci/postgres:13.4-ram
+      name: postgres
+      environment:
+        - POSTGRES_HOST_AUTH_METHOD=trust
+      command: --autovacuum=off --fsync=off --synchronous_commit=off --full_page_writes=off --work_mem=12MB --max-connections=10 --max_wal_senders=0
+
 jobs:
   build:
-    docker:
-      - image: circleci/python:3.8
+    <<: *defaults
 
     steps:
       - checkout
-      - run:
-          name: Install cookiecutter
-          command: | 
-                   apt-get install -y build-essential python-dev
-                   pip install --upgrade pip pip-tools cookiecutter pytest
-                   pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
+      - restore_cache:
+          key: deps-v3-{{ checksum "requirements.txt" }}-{{ checksum "dev-requirements.txt" }}
 
       - run:
-          name: Bootstrap the project
-          command: make test
+          command: sudo apt update && sudo apt --no-install-recommends install -y locales-all
+
+      - run:
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip pip-tools wheel
+            pip-sync requirements.txt dev-requirements.txt
+
+      - save_cache:
+          key: deps-v3-{{ checksum "requirements.txt" }}-{{ checksum "dev-requirements.txt" }}
+          paths:
+            - "venv"
+
+      - run:
+          command: mv src/app/.env.ci src/app/.env
+
+      - run:
+          name: Run linters
+          command: |
+            . venv/bin/activate
+            make lint
+
+      - run:
+          name: Check for forgotten migrations
+          command: |
+            . venv/bin/activate
+            make checkmigrations
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ".git"
+            - "src"
+            - "venv"
+            - ".circleci"
+            - "Makefile"
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: Install locale stuff
+          command: sudo apt update && sudo apt --no-install-recommends install -y locales-all
+
+      - run:
+          name: Install Codeclimate helper
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            make coverage
+
+      - run:
+          name: Upload test coverage to codeclimate
+          command: |
+            cd src && ../cc-test-reporter after-build -t coverage.py
 
 workflows:
   version: 2
-  ci:
+  continuous-delivery:
     jobs:
       - build
+      - test:
+          requires:
+            - build
+ 
