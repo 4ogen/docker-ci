@@ -1,7 +1,8 @@
+[![CircleCI](https://circleci.com/gh/4ogen/docker-ci/tree/master.svg?style=svg)](https://circleci.com/gh/4ogen/docker-ci/tree/master)  [![Docker Image CI](https://github.com/4ogen/docker-ci/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/4ogen/docker-ci/actions/workflows/docker-image.yml)
+
+
 # Django project
 
-
-[![Docker Image CI](https://github.com/4ogen/docker-ci/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/4ogen/docker-ci/actions/workflows/docker-image.yml)
 
 ## Project structure
 
