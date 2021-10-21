@@ -53,10 +53,8 @@ jobs:
             make lint
 
       - run:
-          name: Check for forgotten migrations
-          command: |
-            . venv/bin/activate
-            make checkmigrations
+          name: Run unit tests
+          command: make test
 
       - persist_to_workspace:
           root: .
