@@ -52,25 +52,6 @@ jobs:
             . venv/bin/activate
             make lint
 
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ".git"
-            - "src"
-            - "venv"
-            - ".circleci"
-            - "Makefile"
-
-  test:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
-
-      - run:
-          name: Install locale stuff
-          command: sudo apt update && sudo apt --no-install-recommends install -y locales-all
-
 workflows:
   version: 2
   continuous-delivery:
