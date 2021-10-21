@@ -35,7 +35,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install --upgrade pip pip-tools wheel pytest
+            pip install --upgrade pip pip-tools wheel
             pip-sync requirements.txt dev-requirements.txt
 
       - save_cache:
@@ -51,10 +51,6 @@ jobs:
           command: |
             . venv/bin/activate
             make lint
-
-      - run:
-          name: Run unit tests
-          command: make test
 
       - persist_to_workspace:
           root: .
