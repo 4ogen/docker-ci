@@ -71,23 +71,6 @@ jobs:
           name: Install locale stuff
           command: sudo apt update && sudo apt --no-install-recommends install -y locales-all
 
-      - run:
-          name: Install Codeclimate helper
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-
-      - run:
-          name: Run tests
-          command: |
-            . venv/bin/activate
-            make coverage
-
-      - run:
-          name: Upload test coverage to codeclimate
-          command: |
-            cd src && ../cc-test-reporter after-build -t coverage.py
-
 workflows:
   version: 2
   continuous-delivery:
