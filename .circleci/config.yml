@@ -7,7 +7,7 @@ defaults: &defaults
   docker:
     - image: cimg/python:3.8
       environment:
-        - DATABASE_URL=postgres://postgres:password@postgres:5432/circle_test
+        - DATABASE_URL=postgres://postgres:5432/circle_test
         - REDISCLOUD_URL=redis://redis:6379
 
     - image: circleci/redis:6.2-alpine
@@ -35,7 +35,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install --upgrade pip pip-tools wheel
+            pip install --upgrade pip pip-tools wheel pytest
             pip-sync requirements.txt dev-requirements.txt
 
       - save_cache:
@@ -48,10 +48,21 @@ jobs:
 
       - run:
           name: Run linters
-          command: |
-            . venv/bin/activate
-            make lint
+          command: make lint
+            
+      - run:
+          name: Run unit tests
+          command: make test                    
 
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ".git"
+            - "src"
+            - "venv"
+            - ".circleci"
+            - "Makefile"  
+ 
 workflows:
   version: 2
   continuous-delivery:
